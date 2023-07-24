@@ -50,9 +50,9 @@
             <ListView.View>
                 <GridView>
                     <!-- First Column: Sensor A -->
-                    <GridViewColumn Header="Sensor A" Width="100" DisplayMemberBinding="{Binding Path=SensorAData}" />
+                    <GridViewColumn Header="Sensor A" Width="100" DisplayMemberBinding="{Binding Path=colA}" />
                     <!-- Second Column: Sensor B -->
-                    <GridViewColumn Header="Sensor B" Width="100" DisplayMemberBinding="{Binding Path=SensorBData}" />
+                    <GridViewColumn Header="Sensor B" Width="100" DisplayMemberBinding="{Binding Path=colB}" />
                 </GridView>
             </ListView.View>
         </ListView>

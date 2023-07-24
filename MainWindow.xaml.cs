@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace SatelliteDataProcessing
 {
@@ -40,11 +42,8 @@ namespace SatelliteDataProcessing
         // Declare an instance of the Galileo library in the method and create the appropriate loop construct to populate the two LinkedList;
         // the data from Sensor A will populate the first LinkedList, while the data from Sensor B will populate the second LinkedList.
         // The LinkedList size will be hardcoded inside the method and must be equal to 400. The input parameters are empty, and the return type is void. 
-        public void LoadData(LinkedList<double> newSensorA, LinkedList<double> newSensorB)
-        {
-            newSensorA.Clear();
-            newSensorB.Clear();
-
+        public void LoadData()
+        {            
             // Create an instance of the Galileo6 library
             Galileo6.ReadData galileo = new Galileo6.ReadData();
 
@@ -56,9 +55,9 @@ namespace SatelliteDataProcessing
             // Populate Sensor A data
             for (int i = 0; i < LinkedListSize; i++)
             {
-                // Call the SensorB method from the Galileo library
-                double sensorAValue = galileo.SensorB(mu, sigma);
-                newSensorA.AddLast(sensorAValue); // Adds a new node containing the specified value at the end of the LinkedList<T>.
+                // Call the SensorA method from the Galileo library
+                double sensorAValue = galileo.SensorA(mu, sigma);
+                SensorAData.AddLast(sensorAValue); // Adds a new node containing the specified value at the end of the LinkedList<T>.
             }
 
             // Populate Sensor B data
@@ -66,7 +65,7 @@ namespace SatelliteDataProcessing
             {
                 // Call the SensorB method from the Galileo library
                 double sensorBValue = galileo.SensorB(mu, sigma);
-                newSensorB.AddLast(sensorBValue); // Adds a new node containing the specified value at the end of the LinkedList<T>.
+                SensorBData.AddLast(sensorBValue);
             }
         }
 
@@ -74,15 +73,20 @@ namespace SatelliteDataProcessing
         // Add column titles “Sensor A” and “Sensor B” to the ListView. The input parameters are empty, and the return type is void. 
         public void ShowAllSensorData()
         {
-            lvSensors.Items.Clear();
+            //lvSensors.ItemsSource.Clear();
+
+            var myObservableCollection = new ObservableCollection<object>();
 
             // Traverse both LinkedLists simultaneously and add items to the ListView
             var listAEnumerator = SensorAData.GetEnumerator();
             var listBEnumerator = SensorAData.GetEnumerator();
 
+            myObservableCollection.Add(new { colA = listAEnumerator.Current.ToString(), colB = listBEnumerator.Current.ToString()});
+            lvSensors.ItemsSource = myObservableCollection;
+
             //while (listAEnumerator.MoveNext() && listBEnumerator.MoveNext())
             //{
-            //    ListViewItem item = new ListViewItem(new string[] { listAEnumerator.Current.ToString(), listBEnumerator.Current.ToString() });
+            //    ListViewItem item = new ListViewItem(new stnrig[] { listAEnumerator.Current.ToString(), listBEnumerator.Current.ToString() });
 
             //    lvSensors.Items.Add(item);
             //}
@@ -93,7 +97,7 @@ namespace SatelliteDataProcessing
         // The input parameters are empty, and the return type is void. 
         private void btnLoadData_Click(object sender, RoutedEventArgs e)
         {
-            LoadData(SensorAData, SensorBData);
+            LoadData();
             ShowAllSensorData();
             MessageBox.Show("test btn");
         }
