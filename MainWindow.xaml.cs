@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -95,10 +96,6 @@ namespace SatelliteDataProcessing
             LoadData(SensorAData, SensorBData);
             ShowAllSensorData();
             MessageBox.Show("test btn");
-        }
-        private void btnLoadData_Click_1(object sender, RoutedEventArgs e)
-        {
-
         }
         #endregion
 
@@ -229,14 +226,16 @@ namespace SatelliteDataProcessing
         // Event handler to allow only numeric integer values in the TextBox
         private void NumericIntegerTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Check if the input is a numeric integer (contains only digits)  ---- Regex Class: e.Handled = Regex.IsMatch(e.Text, "[^[0-9]+")  regex101.
+            // Check if the input is a numeric integer (contains only digits)
+            // ---- Regex Class: regex101.com/reger.com for more info.
             foreach (char c in e.Text)
             {
-                if (!char.IsDigit(c))
-                {
-                    e.Handled = true; // Set to true to prevent the invalid character from being entered.
-                    break;
-                }
+                e.Handled = Regex.IsMatch(e.Text, "[^[0-9]+");
+                //if (!char.IsDigit(c))
+                //{
+                //    e.Handled = true; // Set to true to prevent the invalid character from being entered.
+                //    break;
+                //}
             }
         }
 
