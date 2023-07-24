@@ -4,9 +4,104 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SatelliteDataProcessing"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d" FontSize="14" WindowStartupLocation="CenterScreen"
+        Title="Data Processing" Height="470" Width="1020">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="20" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+
+        <!--Title-->
+        <TextBlock Grid.Column="1" Grid.Row="1" Text="MSSS Satellite Data Processing" 
+                   FontSize="20" FontWeight="Regular" Grid.ColumnSpan="8" Margin="350,0,0,20"/>
+
+        <!--Columns 1&2 Read Data-->
+        <TextBlock Grid.Column="1" Grid.Row="2" Text="Sigma"/>
+        <wpfx:IntegerUpDown Grid.Column="2" Grid.Row="2" x:Name="Sigma" Value="10" Minimum="10" Maximum="20"/>
+        <TextBlock Grid.Column="1" Grid.Row="3" Text="Mu" Margin="0,5"/>
+        <wpfx:IntegerUpDown Grid.Column="2" Grid.Row="3" x:Name="Mu" Margin="0,5" Value="50" Minimum="35" Maximum="75"/>
+        <Button Grid.Column="1" Grid.Row="4" x:Name="btnLoadData" Content="Load Sensor Data" Grid.ColumnSpan="2" Margin="0,5,0,5" Click="btnLoadData_Click_1"/>
+        <ListView Grid.Column="1" Grid.Row="5" x:Name="lvSensors" Width="200" Grid.RowSpan="6" Grid.ColumnSpan="2">
+            <!--ItemsSource="{Binding Source={StaticResource galileo}}">-->
+            <ListView.View>
+                <GridView>
+                    <!-- First Column: Sensor A -->
+                    <GridViewColumn Header="Sensor A" Width="100" DisplayMemberBinding="{Binding Path=SensorAData}" />
+                    <!-- Second Column: Sensor B -->
+                    <GridViewColumn Header="Sensor B" Width="100" DisplayMemberBinding="{Binding Path=SensorBData}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!--Columns 3&4&5 Sensors A-->
+        <TextBlock Grid.Column="3" Grid.Row="2" Text="Search Target:" Margin="80,0,5,0"/>
+        <TextBox Grid.Column="4" Grid.Row="2" x:Name="txtSensorAInput" Width="40" Margin="0,0,0,0" PreviewTextInput="NumericIntegerTextBox_PreviewTextInput"/>
+        <!--Selection Sort-->
+        <TextBlock Grid.Column="3" Grid.Row="3" Text="Selection Sort: " Margin="20,20,5,0"/>
+        <TextBox Grid.Column="4" Grid.Row="3" x:Name="txtSelection" Text="1000 Ticks" FontStyle="Italic" Margin="0,20,0,0"/>
+        <Button Grid.Column="3" Grid.Row="4" x:Name="btnSelectionA" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnSelectionA_Click"/>
+        <!--Insertion Sort-->
+        <TextBlock Grid.Column="3" Grid.Row="5" Text="Insertion Sort: " Margin="20,20,5,0"/>
+        <TextBox Grid.Column="4" Grid.Row="5" x:Name="txtInsertionA" Text="1000 Ticks" FontStyle="Italic" Margin="0,20,0,0"/>
+        <Button Grid.Column="3" Grid.Row="6" x:Name="btnInsertionA" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnInsertionA_Click"/>
+        <!--Binary Search Iterative-->
+        <TextBlock Grid.Column="3" Grid.Row="7" Text="Binary Search Iterative: " Margin="20,20,5,0"/>
+        <TextBox Grid.Column="4" Grid.Row="7" x:Name="txtIterativeA" Text="1000 millisecs" FontStyle="Italic" Margin="0,20,0,0"/>
+        <Button Grid.Column="3" Grid.Row="8" x:Name="btnIterativeA" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnIterativeA_Click"/>
+        <!--Binary Search Recursive-->
+        <TextBlock Grid.Column="3" Grid.Row="9" Text="Binary Search Recursive: " Margin="20,20,5,0"/>
+        <TextBox Grid.Column="4" Grid.Row="9" x:Name="txtRecursiveA" Text="1000 millisecs" FontStyle="Italic" Margin="0,20,0,0"/>
+        <Button Grid.Column="3" Grid.Row="10" x:Name="btnRecursiveA" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnRecursiveA_Click"/>
+        <!--Sensor A Listbox-->
+        <TextBlock Grid.Column="5" Grid.Row="2" Text="Sensor A" FontWeight="DemiBold" Margin="30,0,0,0"/>
+        <ListBox Grid.Column="5" Grid.Row="3" x:Name="lbSensorA" Width="100" Grid.RowSpan="8" Margin="10,0,0,0"/>
+
+        <!--Columns 6&7&8 Sensors B-->
+        <TextBlock Grid.Column="6" Grid.Row="2" Text="Search Target:" Margin="80,0,5,0"/>
+        <TextBox Grid.Column="7" Grid.Row="2" x:Name="txtSensorBInput" Width="40" Margin="0,0,0,0" PreviewTextInput="NumericIntegerTextBox_PreviewTextInput"/>
+        <!--Selection Sort-->
+        <TextBlock Grid.Column="6" Grid.Row="3" Text="Selection Sort: " Margin="20,20,5,0"/>
+        <TextBox Grid.Column="7" Grid.Row="3" x:Name="txtSelectionB" Text="1000 Ticks" FontStyle="Italic" Margin="0,20,0,0"/>
+        <Button Grid.Column="6" Grid.Row="4" x:Name="btnSelectionB" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnSelectionB_Click"/>
+        <!--Insertion Sort-->
+        <TextBlock Grid.Column="6" Grid.Row="5" Text="Insertion Sort: " Margin="20,20,5,0"/>
+        <TextBox Grid.Column="7" Grid.Row="5" x:Name="txtInsertionB" Text="1000 Ticks" FontStyle="Italic" Margin="0,20,0,0"/>
+        <Button Grid.Column="6" Grid.Row="6" x:Name="btnInsertionB" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnInsertionB_Click"/>
+        <!--Binary Search Iterative-->
+        <TextBlock Grid.Column="6" Grid.Row="7" Text="Binary Search Iterative: " Margin="20,20,5,0"/>
+        <TextBox Grid.Column="7" Grid.Row="7" x:Name="txtIterativeB" Text="1000 millisecs" FontStyle="Italic" Margin="0,20,0,0"/>
+        <Button Grid.Column="6" Grid.Row="8" x:Name="btnIterativeB" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnIterativeB_Click"/>
+        <!--Binary Search Recursive-->
+        <TextBlock Grid.Column="6" Grid.Row="9" Text="Binary Search Recursive: " Margin="20,20,5,0"/>
+        <TextBox Grid.Column="7" Grid.Row="9" x:Name="txtRecursiveB" Text="1000 millisecs" FontStyle="Italic" Margin="0,20,0,0"/>
+        <Button Grid.Column="6" Grid.Row="10" x:Name="btnRecursiveB" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnRecursiveB_Click"/>
+        <!--Sensor A Listbox-->
+        <TextBlock Grid.Column="8" Grid.Row="2" Text="Sensor B" FontWeight="DemiBold" Margin="30,0,0,0"/>
+        <ListBox Grid.Column="8" Grid.Row="3" x:Name="lbSensorB" Width="100" Grid.RowSpan="8" Margin="10,0,0,0"/>
 
     </Grid>
 </Window>
