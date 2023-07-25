@@ -49,14 +49,15 @@ namespace SatelliteDataProcessing
 
             const int LinkedListSize = 400;
 
-            double mu = 0.0;
-            double sigma = 0.0;
+            // Clear existing data before populating the LinkedLists again
+            SensorAData.Clear();
+            SensorBData.Clear();
 
             // Populate Sensor A data
             for (int i = 0; i < LinkedListSize; i++)
             {
                 // Call the SensorA method from the Galileo library
-                double sensorAValue = galileo.SensorA(mu, sigma);
+                double sensorAValue = galileo.SensorA((double)Mu.Value, (double)Sigma.Value);
                 SensorAData.AddLast(sensorAValue); // Adds a new node containing the specified value at the end of the LinkedList<T>.
             }
 
@@ -64,7 +65,7 @@ namespace SatelliteDataProcessing
             for (int i = 0; i < LinkedListSize; i++)
             {
                 // Call the SensorB method from the Galileo library
-                double sensorBValue = galileo.SensorB(mu, sigma);
+                double sensorBValue = galileo.SensorB((double)Mu.Value, (double)Sigma.Value);
                 SensorBData.AddLast(sensorBValue);
             }
         }
@@ -79,18 +80,19 @@ namespace SatelliteDataProcessing
 
             // Traverse both LinkedLists simultaneously and add items to the ListView
             var listAEnumerator = SensorAData.GetEnumerator();
-            var listBEnumerator = SensorAData.GetEnumerator();
+            var listBEnumerator = SensorBData.GetEnumerator();
 
-            myObservableCollection.Add(new { colA = listAEnumerator.Current.ToString(), colB = listBEnumerator.Current.ToString()});
+            //myObservableCollection.Add(new { colA = listAEnumerator.Current.ToString(), colB = listBEnumerator.Current.ToString()});
+            //lvSensors.ItemsSource = myObservableCollection;
+
+            while (listAEnumerator.MoveNext() && listBEnumerator.MoveNext())
+            {
+                myObservableCollection.Add(new { SensorA = listAEnumerator.Current, SensorB = listBEnumerator.Current });
+            }
+            // Clear the existing items in the ListView
+            lvSensors.ItemsSource = null;
+            // Set the ObservableCollection as the ItemsSource for the ListView
             lvSensors.ItemsSource = myObservableCollection;
-
-            //while (listAEnumerator.MoveNext() && listBEnumerator.MoveNext())
-            //{
-            //    ListViewItem item = new ListViewItem(new stnrig[] { listAEnumerator.Current.ToString(), listBEnumerator.Current.ToString() });
-
-            //    lvSensors.Items.Add(item);
-            //}
-
         }
 
         // 4.4 Create a button and associated click method that will call the LoadData and ShowAllSensorData methods.
@@ -99,7 +101,9 @@ namespace SatelliteDataProcessing
         {
             LoadData();
             ShowAllSensorData();
-            MessageBox.Show("test btn");
+
+            DisplayListboxData(SensorAData, lbSensorA);
+            DisplayListboxData(SensorBData, lbSensorB);
         }
         #endregion
 
@@ -118,13 +122,13 @@ namespace SatelliteDataProcessing
         {
             newListBox.Items.Clear();
 
-            // Traverse the LinkedList and add items to the ListBox
-            var enumerator = newLinkedList.GetEnumerator();
-            while (enumerator.MoveNext())
+            // Traverse the LinkedList and add each element to the ListBox
+            foreach (var item in newLinkedList)
             {
-                newListBox.Items.Add(enumerator.Current);
+                newListBox.Items.Add(item);
             }
         }
+
         #endregion
 
         #region Sort and Search Methods 
@@ -244,6 +248,27 @@ namespace SatelliteDataProcessing
         }
 
         // 4.15 All code is required to be adequately commented.
+
+        #endregion
+
+        #region Event Handler
+        private void Sigma_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (e.NewValue != null)
+            {
+                int newValue = (int)e.NewValue;
+                // Handle the new value here...
+            }
+        }
+
+        private void Mu_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (e.NewValue != null)
+            {
+                int newValue = (int)e.NewValue;
+                // Handle the new value here...
+            }
+        }
 
         #endregion
     }
