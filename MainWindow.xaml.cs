@@ -47,14 +47,12 @@ namespace SatelliteDataProcessing
             // Create an instance of the Galileo6 library
             Galileo6.ReadData galileo = new Galileo6.ReadData();
 
-            const int LinkedListSize = 400;
-
             // Clear existing data before populating the LinkedLists again
             SensorAData.Clear();
             SensorBData.Clear();
 
             // Populate Sensor A data
-            for (int i = 0; i < LinkedListSize; i++)
+            for (int i = 0; i < 400; i++)
             {
                 // Call the SensorA method from the Galileo library
                 double sensorAValue = galileo.SensorA((double)Mu.Value, (double)Sigma.Value);
@@ -62,7 +60,7 @@ namespace SatelliteDataProcessing
             }
 
             // Populate Sensor B data
-            for (int i = 0; i < LinkedListSize; i++)
+            for (int i = 0; i < 400; i++)
             {
                 // Call the SensorB method from the Galileo library
                 double sensorBValue = galileo.SensorB((double)Mu.Value, (double)Sigma.Value);
@@ -135,30 +133,116 @@ namespace SatelliteDataProcessing
         // 4.7 Create a method called “SelectionSort” which has a single input parameter of type LinkedList,
         // while the calling code argument is the linkedlist name.
         // The method code must follow the pseudo code supplied below in the Appendix. The return type is Boolean. 
-        private bool SelectionSort(LinkedList<double> newLinkedList)
+        private bool SelectionSort(LinkedList<double> list)
         {
+            if (list == null || list.Count <= 1)
+            {
+                // The list is already sorted if it contains 0 or 1 element.
+                return true;
+            }
 
-            return false;  //  --- to be fixed
+            int min = 0;
+            int max = NumberOfNodes(list);
+
+            for (int i = 0; i < max - 1; i++)
+            {
+                min = i;
+
+                for (int j = i + 1; j < max; j++)
+                {
+                    if (list.ElementAt(j) < list.ElementAt(min))
+                    {
+                        min = j;
+                    }
+                }
+
+                // Swap elements at index i and min.
+                LinkedListNode<double> currentMin = list.Find(list.ElementAt(min));
+                LinkedListNode<double> currentI = list.Find(list.ElementAt(i));
+
+                double temp = currentMin.Value;
+                currentMin.Value = currentI.Value;
+                currentI.Value = temp;
+            }
+            return true;
         }
 
 
         // 4.8 Create a method called “InsertionSort” which has a single parameter of type LinkedList,
         // while the calling code argument is the linkedlist name.
         // The method code must follow the pseudo code supplied below in the Appendix. The return type is Boolean. 
-        private bool InsertionSort(LinkedList<double> newLinkedList)
+        private bool InsertionSort(LinkedList<double> list)
         {
+            if (list == null || list.Count <= 1)
+            {
+                // The list is already sorted if it contains 0 or 1 element.
+                return true;
+            }
 
-            return false;  //  --- to be fixed
+            int max = NumberOfNodes(list);
+
+            for (int i = 0; i < max - 1; i++)
+            {
+                for (int j = i + 1; j > 0; j--)
+                {
+                    if (list.ElementAt(j - 1) > list.ElementAt(j))
+                    {
+                        // Swap elements at index j - 1 and j.
+                        LinkedListNode<double> current = list.Find(list.ElementAt(j));                      
+                        LinkedListNode<double> previous = list.Find(list.ElementAt(j - 1));
+                        double temp = current.Value;
+                        current.Value = previous.Value;
+                        previous.Value = temp;
+                    }
+                    else
+                    {
+                        // The element at index j is in the correct position.
+                        // Break the inner loop as further iterations are not required.
+                        break;
+                    }
+                }
+            }
+            return true;
         }
 
         // 4.9 Create a method called “BinarySearchIterative” which has the following four parameters: LinkedList, SearchValue, Minimum and Maximum.
         // This method will return an integer of the linkedlist element from a successful search or the nearest neighbour value.
         // The calling code argument is the linkedlist name, search value, minimum list size and the number of nodes in the list.
         // The method code must follow the pseudo code supplied below in the Appendix. 
-        private int BinarySearchIterative(LinkedList<double> newLinkedList, int searchValue, int min, int max)
+        private int BinarySearchIterative(LinkedList<double> list, int searchValue, int min, int max)
         {
+            if (list == null || list.Count == 0 || min > max || searchValue == null || searchValue < list.First.Value || searchValue > list.Last.Value)
+            {
+                // If the list is empty or invalid range, return -1 to indicate failure.
+                return -1;
+            }
 
-            return 0;  //  --- to be fixed
+            while (min <= max)
+            {
+                int middle = (min + max) / 2;
+                int middleValue = Convert.ToInt32(list.ElementAt(middle)); // convert: double -> int
+
+                if (searchValue == middleValue)
+                {
+                    // If the search value is found, return the index (position) of the element.
+                    return ++middle;
+                }
+                else if (searchValue < middleValue)
+                {
+                    // If the search value is less than the middle element,
+                    // update the maximum to search in the left half.
+                    max = middle - 1;
+                }
+                else
+                {
+                    // If the search value is greater than the middle element,
+                    // update the minimum to search in the right half.
+                    min = middle + 1;
+                }
+            }
+
+            // If the search value is not found, return the position where it should be inserted (nearest neighbor).
+            return min;
         }
 
         // 4.10 Create a method called “BinarySearchRecursive” which has the following four parameters: LinkedList, SearchValue, Minimum and Maximum.
@@ -167,7 +251,6 @@ namespace SatelliteDataProcessing
         // The method code must follow the pseudo code supplied below in the Appendix. 
         private int BinarySearchRecursive(LinkedList<double> newLinkedList, int searchValue, int min, int max)
         {
-
             return 0;  //  --- to be fixed
         }
         #endregion
@@ -181,7 +264,21 @@ namespace SatelliteDataProcessing
         // 1. Method for Sensor A and Binary Search Iterative
         private void btnIterativeA_Click(object sender, RoutedEventArgs e)
         {
+            //if (searchValue == null || searchValue < list.First.Value || searchValue > list.Last.Value)
+            //{
+            //    // If the list is empty or invalid range, return -1 to indicate failure.
+            //    return -1;
+            //}
+            int searchA = int.Parse(txtSensorAInput.Text);
+            int min = SensorAData.Count;
+            int max = NumberOfNodes(SensorAData);
 
+            int result = BinarySearchIterative(SensorAData, searchA, min, max);
+
+            foreach (double value in SensorAData)
+            {
+                txtIterativeA.Text = value.ToString();
+            }
         }
 
         // 2. Method for Sensor A and Binary Search Recursive 
@@ -206,30 +303,51 @@ namespace SatelliteDataProcessing
         // 1. Method for Sensor A and Selection Sort 
         private void btnSelectionA_Click(object sender, RoutedEventArgs e)
         {
-
+            // Ticks VS milliseconds    definition
+            txtSelectionA.Text = "";
+            SelectionSort(SensorAData);
+            txtSelectionA.Text = "xxx Ticks";
+            DisplayListboxData(SensorAData,lbSensorA);
         }
 
         // 2. Method for Sensor A and Insertion Sort
         private void btnInsertionA_Click(object sender, RoutedEventArgs e)
         {
-
+            txtInsertionA.Text = "";
+            InsertionSort(SensorAData);
+            txtInsertionA.Text = "InsertionA Ticks";
+            DisplayListboxData(SensorAData, lbSensorA);
         }
 
         // 3. Method for Sensor B and Selection Sort 
         private void btnSelectionB_Click(object sender, RoutedEventArgs e)
         {
-
+            txtSelectionB.Text = "";
+            SelectionSort(SensorBData);
+            txtSelectionB.Text = "xxx Ticks";
+            DisplayListboxData(SensorBData, lbSensorB);
         }
 
         // 4. Method for Sensor B and Insertion Sort
         private void btnInsertionB_Click(object sender, RoutedEventArgs e)
         {
-
+            txtInsertionB.Text = "";
+            InsertionSort(SensorBData);
+            txtInsertionB.Text = "InsertionB Ticks";
+            DisplayListboxData(SensorBData, lbSensorB);
         }
 
         // 4.13 Add two numeric input controls for Sigma and Mu. The value for Sigma must be limited with a minimum of 10 and a maximum of 20.
         // Set the default value to 10. The value for Mu must be limited with a minimum of 35 and a maximum of 75. Set the default value to 50. 
+        private void Sigma_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Sigma.Value = (int)e.NewValue;
+        }
 
+        private void Mu_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Mu.Value = (int)e.NewValue;
+        }
         // 4.14 Add two textboxes for the search value; one for each sensor, ensure only numeric integer values can be entered. 
         // Event handler to allow only numeric integer values in the TextBox
         private void NumericIntegerTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -239,37 +357,10 @@ namespace SatelliteDataProcessing
             foreach (char c in e.Text)
             {
                 e.Handled = Regex.IsMatch(e.Text, "[^[0-9]+");
-                //if (!char.IsDigit(c))
-                //{
-                //    e.Handled = true; // Set to true to prevent the invalid character from being entered.
-                //    break;
-                //}
             }
         }
 
         // 4.15 All code is required to be adequately commented.
-
-        #endregion
-
-        #region Event Handler
-        private void Sigma_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            if (e.NewValue != null)
-            {
-                int newValue = (int)e.NewValue;
-                // Handle the new value here...
-            }
-        }
-
-        private void Mu_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            if (e.NewValue != null)
-            {
-                int newValue = (int)e.NewValue;
-                // Handle the new value here...
-            }
-        }
-
         #endregion
     }
 }
