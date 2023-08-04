@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -43,7 +44,7 @@ namespace SatelliteDataProcessing
         // the data from Sensor A will populate the first LinkedList, while the data from Sensor B will populate the second LinkedList.
         // The LinkedList size will be hardcoded inside the method and must be equal to 400. The input parameters are empty, and the return type is void. 
         public void LoadData()
-        {            
+        {
             // Create an instance of the Galileo6 library
             Galileo6.ReadData galileo = new Galileo6.ReadData();
 
@@ -102,6 +103,12 @@ namespace SatelliteDataProcessing
 
             DisplayListboxData(SensorAData, lbSensorA);
             DisplayListboxData(SensorBData, lbSensorB);
+
+            // Disable all search buttons, because of unsorted lists
+            btnIterativeA.IsEnabled = false;
+            btnRecursiveA.IsEnabled = false;
+            btnIterativeB.IsEnabled = false;
+            btnRecursiveB.IsEnabled = false;
         }
         #endregion
 
@@ -188,7 +195,7 @@ namespace SatelliteDataProcessing
                     if (list.ElementAt(j - 1) > list.ElementAt(j))
                     {
                         // Swap elements at index j - 1 and j.
-                        LinkedListNode<double> current = list.Find(list.ElementAt(j));                      
+                        LinkedListNode<double> current = list.Find(list.ElementAt(j));
                         LinkedListNode<double> previous = list.Find(list.ElementAt(j - 1));
                         double temp = current.Value;
                         current.Value = previous.Value;
@@ -220,7 +227,7 @@ namespace SatelliteDataProcessing
             while (min <= max)
             {
                 int middle = (min + max) / 2;
-                int middleValue = Convert.ToInt32(list.ElementAt(middle)); // convert: double -> int
+                double middleValue = list.ElementAt(middle);
 
                 if (searchValue == middleValue)
                 {
@@ -249,9 +256,34 @@ namespace SatelliteDataProcessing
         // This method will return an integer of the linkedlist element from a successful search or the nearest neighbour value.
         // The calling code argument is the linkedlist name, search value, minimum list size and the number of nodes in the list.
         // The method code must follow the pseudo code supplied below in the Appendix. 
-        private int BinarySearchRecursive(LinkedList<double> newLinkedList, int searchValue, int min, int max)
+        private int BinarySearchRecursive(LinkedList<double> list, int searchValue, int min, int max)
         {
-            return 0;  //  --- to be fixed
+            if (min <= max - 1)
+            {
+                int middle = (min + max) / 2;
+                double middleValue = list.ElementAt(middle);
+
+                if (searchValue == middleValue)
+                {
+                    // If the search value is found, return the index (position) of the element.
+                    return middle;
+                }
+                else if (searchValue < middleValue)
+                {
+                    // If the search value is less than the middle element,
+                    // recursively search in the left half.
+                    return BinarySearchRecursive(list, searchValue, min, middle - 1);
+                }
+                else
+                {
+                    // If the search value is greater than the middle element,
+                    // recursively search in the right half.
+                    return BinarySearchRecursive(list, searchValue, middle + 1, max);
+                }
+            }
+
+            // If the search value is not found, return the position where it should be inserted (nearest neighbor).
+            return min;
         }
         #endregion
 
@@ -264,77 +296,231 @@ namespace SatelliteDataProcessing
         // 1. Method for Sensor A and Binary Search Iterative
         private void btnIterativeA_Click(object sender, RoutedEventArgs e)
         {
-            //if (searchValue == null || searchValue < list.First.Value || searchValue > list.Last.Value)
-            //{
-            //    // If the list is empty or invalid range, return -1 to indicate failure.
-            //    return -1;
-            //}
-            int searchA = int.Parse(txtSensorAInput.Text);
-            int min = SensorAData.Count;
-            int max = NumberOfNodes(SensorAData);
+            txtIterativeA.Text = "";
 
-            int result = BinarySearchIterative(SensorAData, searchA, min, max);
-
-            foreach (double value in SensorAData)
+            if (int.TryParse(txtSearchTargetA.Text, out int searchA))
             {
-                txtIterativeA.Text = value.ToString();
+                int min = 400; // not sure what is the minimum list size is????
+                int max = NumberOfNodes(SensorAData);
+
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                int result = BinarySearchIterative(SensorAData, searchA, min, max);
+                watch.Stop();
+                var elapsedTicks = watch.ElapsedTicks;
+
+                txtIterativeA.Text = $"{elapsedTicks} Ticks";
+
+                //// Clear any previous selection
+                //lbSensorA.SelectedItems.Clear();
+
+                //if (result >= 0 && result < lbSensorA.Items.Count)
+                //{
+                //    // Highlight the range (5 elements) centered around the result
+                //    int start = Math.Max(0, result - 2); // Ensure start index is >= 0
+                //    int end = Math.Min(lbSensorA.Items.Count - 1, result + 2); // Ensure end index is within bounds
+
+                //    // Select the items in the specified range
+                //    for (int i = start; i <= end; i++)
+                //    {
+                //        lbSensorA.SelectedItems.Add(lbSensorA.Items[i]);
+                //    }
+                //}
+            }
+            else
+            {
+                txtIterativeA.Text = "emtpy target";
             }
         }
 
         // 2. Method for Sensor A and Binary Search Recursive 
         private void btnRecursiveA_Click(object sender, RoutedEventArgs e)
         {
+            txtRecursiveA.Text = "";
+            if (int.TryParse(txtSearchTargetA.Text, out int searchA))
+            {
+                int min = 400; // not sure what is the minimum list size is????
+                int max = NumberOfNodes(SensorAData);
+
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                int result = BinarySearchIterative(SensorAData, searchA, min, max);
+                watch.Stop();
+                var elapsedTicks = watch.ElapsedTicks;
+
+                txtRecursiveA.Text = $"{elapsedTicks} Ticks";
+
+                //// Clear any previous selection
+                //lbSensorA.SelectedItems.Clear();
+
+                //if (result >= 0 && result < lbSensorA.Items.Count)
+                //{
+                //    // Highlight the range (5 elements) centered around the result
+                //    int start = Math.Max(0, result - 2); // Ensure start index is >= 0
+                //    int end = Math.Min(lbSensorA.Items.Count - 1, result + 2); // Ensure end index is within bounds
+
+                //    // Select the items in the specified range
+                //    for (int i = start; i <= end; i++)
+                //    {
+                //        lbSensorA.SelectedItems.Add(lbSensorA.Items[i]);
+                //    }
+                //}
+            }
+            else
+            {
+                txtRecursiveA.Text = "emtpy target";
+            }
 
         }
 
         // 3. Method for Sensor B and Binary Search Iterative 
         private void btnIterativeB_Click(object sender, RoutedEventArgs e)
         {
+            txtIterativeB.Text = "";
+
+            if (int.TryParse(txtSearchTargetB.Text, out int searchB))
+            {
+                int min = 400; // not sure what is the minimum list size is????
+                int max = NumberOfNodes(SensorBData);
+
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                int result = BinarySearchIterative(SensorBData, searchB, min, max);
+                watch.Stop();
+                var elapsedTicks = watch.ElapsedTicks;
+
+                txtIterativeB.Text = $"{elapsedTicks} Ticks";
+
+                //// Clear any previous selection
+                //lbSensorA.SelectedItems.Clear();
+
+                //if (result >= 0 && result < lbSensorA.Items.Count)
+                //{
+                //    // Highlight the range (5 elements) centered around the result
+                //    int start = Math.Max(0, result - 2); // Ensure start index is >= 0
+                //    int end = Math.Min(lbSensorA.Items.Count - 1, result + 2); // Ensure end index is within bounds
+
+                //    // Select the items in the specified range
+                //    for (int i = start; i <= end; i++)
+                //    {
+                //        lbSensorA.SelectedItems.Add(lbSensorA.Items[i]);
+                //    }
+                //}
+            }
+            else
+            {
+                txtIterativeB.Text = "emtpy target";
+            }
 
         }
 
         // 4. Method for Sensor B and Binary Search Recursive 
         private void btnRecursiveB_Click(object sender, RoutedEventArgs e)
         {
+            txtRecursiveB.Text = "";
+            if (int.TryParse(txtSearchTargetB.Text, out int searchB))
+            {
+                int min = 400; // not sure what is the minimum list size is????
+                int max = NumberOfNodes(SensorBData);
 
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                int result = BinarySearchIterative(SensorBData, searchB, min, max);
+                watch.Stop();
+                var elapsedTicks = watch.ElapsedTicks;
+
+                txtRecursiveB.Text = $"{elapsedTicks} Ticks";
+
+                //// Clear any previous selection
+                //lbSensorA.SelectedItems.Clear();
+
+                //if (result >= 0 && result < lbSensorA.Items.Count)
+                //{
+                //    // Highlight the range (5 elements) centered around the result
+                //    int start = Math.Max(0, result - 2); // Ensure start index is >= 0
+                //    int end = Math.Min(lbSensorA.Items.Count - 1, result + 2); // Ensure end index is within bounds
+
+                //    // Select the items in the specified range
+                //    for (int i = start; i <= end; i++)
+                //    {
+                //        lbSensorA.SelectedItems.Add(lbSensorA.Items[i]);
+                //    }
+                //}
+            }
+            else
+            {
+                txtRecursiveB.Text = "emtpy target";
+            }
         }
 
-        // 4.12 ...
+        // 4.12 Create four button click methods that will sort the LinkedList using the Selection and Insertion methods.
+        // (The button method must start a stopwatch before calling the sort method. Once the sort is complete the stopwatch will stop,
+        // and the number of milliseconds will be displayed in a read only textbox.
+        // Finally, the code/method will call the “ShowAllSensorData” method and “DisplayListboxData” for the appropriate sensor. )
         // 1. Method for Sensor A and Selection Sort 
         private void btnSelectionA_Click(object sender, RoutedEventArgs e)
         {
-            // Ticks VS milliseconds    definition
+            // A tick (0.0000001 seconds) represents a single increment of the system's internal clock.
+            // Ticks are a unit of time used to measure the passage of time in computer systems. 
+            // A milliseconds(ms) (0.001 seconds) is commonly used to measure very short durations, especially in computer programming,
+            // where operations are often executed in milliseconds.
+
             txtSelectionA.Text = "";
+
+            var watch = System.Diagnostics.Stopwatch.StartNew(); // more precise than DateTime.Now()
             SelectionSort(SensorAData);
-            txtSelectionA.Text = "xxx Ticks";
-            DisplayListboxData(SensorAData,lbSensorA);
+
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+
+            txtSelectionA.Text = $"{elapsedMs} milliseconds";
+            DisplayListboxData(SensorAData, lbSensorA);
+            btnIterativeA.IsEnabled = true;
+            btnRecursiveA.IsEnabled = true;
         }
 
         // 2. Method for Sensor A and Insertion Sort
         private void btnInsertionA_Click(object sender, RoutedEventArgs e)
         {
             txtInsertionA.Text = "";
+
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             InsertionSort(SensorAData);
-            txtInsertionA.Text = "InsertionA Ticks";
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+
+            txtInsertionA.Text = $"{elapsedMs} milliseconds";
             DisplayListboxData(SensorAData, lbSensorA);
+            btnIterativeA.IsEnabled = true;
+            btnRecursiveA.IsEnabled = true;
         }
 
         // 3. Method for Sensor B and Selection Sort 
         private void btnSelectionB_Click(object sender, RoutedEventArgs e)
         {
             txtSelectionB.Text = "";
+
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             SelectionSort(SensorBData);
-            txtSelectionB.Text = "xxx Ticks";
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+
+            txtSelectionB.Text = $"{elapsedMs} milliseconds";
             DisplayListboxData(SensorBData, lbSensorB);
+            btnIterativeB.IsEnabled = true;
+            btnRecursiveB.IsEnabled = true;
         }
 
         // 4. Method for Sensor B and Insertion Sort
         private void btnInsertionB_Click(object sender, RoutedEventArgs e)
         {
             txtInsertionB.Text = "";
+
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             InsertionSort(SensorBData);
-            txtInsertionB.Text = "InsertionB Ticks";
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+
+            txtInsertionB.Text = $"{elapsedMs} milliseconds";
             DisplayListboxData(SensorBData, lbSensorB);
+            btnIterativeB.IsEnabled = true;
+            btnRecursiveB.IsEnabled = true;
         }
 
         // 4.13 Add two numeric input controls for Sigma and Mu. The value for Sigma must be limited with a minimum of 10 and a maximum of 20.
@@ -363,4 +549,5 @@ namespace SatelliteDataProcessing
         // 4.15 All code is required to be adequately commented.
         #endregion
     }
+
 }
