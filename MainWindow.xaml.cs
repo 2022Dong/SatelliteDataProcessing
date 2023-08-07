@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Galileo6;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -75,25 +76,33 @@ namespace SatelliteDataProcessing
         // Add column titles “Sensor A” and “Sensor B” to the ListView. The input parameters are empty, and the return type is void. 
         public void ShowAllSensorData()
         {
-            //lvSensors.ItemsSource.Clear();
-
-            var myObservableCollection = new ObservableCollection<object>();
-
-            // Traverse both LinkedLists simultaneously and add items to the ListView
-            var listAEnumerator = SensorAData.GetEnumerator();
-            var listBEnumerator = SensorBData.GetEnumerator();
-
-            //myObservableCollection.Add(new { colA = listAEnumerator.Current.ToString(), colB = listBEnumerator.Current.ToString()});
-            //lvSensors.ItemsSource = myObservableCollection;
-
-            while (listAEnumerator.MoveNext() && listBEnumerator.MoveNext())
+            lvSensors.Items.Clear();
+            for (int x = 0; x < 400; x++)
             {
-                myObservableCollection.Add(new { SensorA = listAEnumerator.Current, SensorB = listBEnumerator.Current });
+                lvSensors.Items.Add(new
+                {
+                    SensorA = SensorAData.ElementAt(x).ToString(),
+                    SensorB = SensorBData.ElementAt(x).ToString()
+                });
             }
-            // Clear the existing items in the ListView
-            lvSensors.ItemsSource = null;
-            // Set the ObservableCollection as the ItemsSource for the ListView
-            lvSensors.ItemsSource = myObservableCollection;
+
+            //var myObservableCollection = new ObservableCollection<object>();
+
+            //// Traverse both LinkedLists simultaneously and add items to the ListView
+            //var listAEnumerator = SensorAData.GetEnumerator();
+            //var listBEnumerator = SensorBData.GetEnumerator();
+
+            ////myObservableCollection.Add(new { colA = listAEnumerator.Current.ToString(), colB = listBEnumerator.Current.ToString()});
+            ////lvSensors.ItemsSource = myObservableCollection;
+
+            //while (listAEnumerator.MoveNext() && listBEnumerator.MoveNext())
+            //{
+            //    myObservableCollection.Add(new { SensorA = listAEnumerator.Current, SensorB = listBEnumerator.Current });
+            //}
+            //// Clear the existing items in the ListView
+            //lvSensors.ItemsSource = null;
+            //// Set the ObservableCollection as the ItemsSource for the ListView
+            //lvSensors.ItemsSource = myObservableCollection;            
         }
 
         // 4.4 Create a button and associated click method that will call the LoadData and ShowAllSensorData methods.
