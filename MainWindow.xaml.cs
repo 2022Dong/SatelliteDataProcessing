@@ -20,7 +20,9 @@ using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 namespace SatelliteDataProcessing
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Develop a .NET Multi-platform App for Malin Space Science Systems to process and analyze satellite data 
+    /// using sorting and searching algorithms.
+    /// 
     /// Dongyun Huang 30042104
     /// </summary>
     public partial class MainWindow : Window
@@ -104,6 +106,11 @@ namespace SatelliteDataProcessing
             DisplayListboxData(SensorAData, lbSensorA);
             DisplayListboxData(SensorBData, lbSensorB);
 
+            // Enable all sort buttons by default.
+            btnSelectionA.IsEnabled = true;
+            btnSelectionB.IsEnabled = true;
+            btnInsertionA.IsEnabled = true;
+            btnInsertionB.IsEnabled = true;
             // Disable all search buttons, because of unsorted lists
             btnIterativeA.IsEnabled = false;
             btnRecursiveA.IsEnabled = false;
@@ -133,7 +140,6 @@ namespace SatelliteDataProcessing
                 newListBox.Items.Add(item);
             }
         }
-
         #endregion
 
         #region Sort and Search Methods 
@@ -173,7 +179,6 @@ namespace SatelliteDataProcessing
             }
             return true;
         }
-
 
         // 4.8 Create a method called “InsertionSort” which has a single parameter of type LinkedList,
         // while the calling code argument is the linkedlist name.
@@ -217,14 +222,8 @@ namespace SatelliteDataProcessing
         // The calling code argument is the linkedlist name, search value, minimum list size and the number of nodes in the list.
         // The method code must follow the pseudo code supplied below in the Appendix. 
         private int BinarySearchIterative(LinkedList<double> list, int searchValue, int min, int max)
-        {
-            if (list == null || list.Count == 0 || min > max || searchValue == null || searchValue < list.First.Value || searchValue > list.Last.Value)
-            {
-                // If the list is empty or invalid range, return -1 to indicate failure.
-                return -1;
-            }
-
-            while (min <= max)
+        {            
+            while (min <= max -1)
             {
                 int middle = (min + max) / 2;
                 double middleValue = list.ElementAt(middle);
@@ -300,31 +299,17 @@ namespace SatelliteDataProcessing
 
             if (int.TryParse(txtSearchTargetA.Text, out int searchA))
             {
-                int min = 400; // not sure what is the minimum list size is????
+                int min = 0;
                 int max = NumberOfNodes(SensorAData);
 
                 var watch = System.Diagnostics.Stopwatch.StartNew();
-                int result = BinarySearchIterative(SensorAData, searchA, min, max);
+                int found = BinarySearchIterative(SensorAData, searchA, min, max);
                 watch.Stop();
                 var elapsedTicks = watch.ElapsedTicks;
 
                 txtIterativeA.Text = $"{elapsedTicks} Ticks";
 
-                //// Clear any previous selection
-                //lbSensorA.SelectedItems.Clear();
-
-                //if (result >= 0 && result < lbSensorA.Items.Count)
-                //{
-                //    // Highlight the range (5 elements) centered around the result
-                //    int start = Math.Max(0, result - 2); // Ensure start index is >= 0
-                //    int end = Math.Min(lbSensorA.Items.Count - 1, result + 2); // Ensure end index is within bounds
-
-                //    // Select the items in the specified range
-                //    for (int i = start; i <= end; i++)
-                //    {
-                //        lbSensorA.SelectedItems.Add(lbSensorA.Items[i]);
-                //    }
-                //}
+                HightlightListbox(found, lbSensorA);
             }
             else
             {
@@ -338,31 +323,17 @@ namespace SatelliteDataProcessing
             txtRecursiveA.Text = "";
             if (int.TryParse(txtSearchTargetA.Text, out int searchA))
             {
-                int min = 400; // not sure what is the minimum list size is????
+                int min = 0;
                 int max = NumberOfNodes(SensorAData);
 
                 var watch = System.Diagnostics.Stopwatch.StartNew();
-                int result = BinarySearchIterative(SensorAData, searchA, min, max);
+                int found = BinarySearchIterative(SensorAData, searchA, min, max);
                 watch.Stop();
                 var elapsedTicks = watch.ElapsedTicks;
 
                 txtRecursiveA.Text = $"{elapsedTicks} Ticks";
 
-                //// Clear any previous selection
-                //lbSensorA.SelectedItems.Clear();
-
-                //if (result >= 0 && result < lbSensorA.Items.Count)
-                //{
-                //    // Highlight the range (5 elements) centered around the result
-                //    int start = Math.Max(0, result - 2); // Ensure start index is >= 0
-                //    int end = Math.Min(lbSensorA.Items.Count - 1, result + 2); // Ensure end index is within bounds
-
-                //    // Select the items in the specified range
-                //    for (int i = start; i <= end; i++)
-                //    {
-                //        lbSensorA.SelectedItems.Add(lbSensorA.Items[i]);
-                //    }
-                //}
+                HightlightListbox(found, lbSensorA);
             }
             else
             {
@@ -378,31 +349,17 @@ namespace SatelliteDataProcessing
 
             if (int.TryParse(txtSearchTargetB.Text, out int searchB))
             {
-                int min = 400; // not sure what is the minimum list size is????
+                int min = 0;
                 int max = NumberOfNodes(SensorBData);
 
                 var watch = System.Diagnostics.Stopwatch.StartNew();
-                int result = BinarySearchIterative(SensorBData, searchB, min, max);
+                int found = BinarySearchIterative(SensorBData, searchB, min, max);
                 watch.Stop();
                 var elapsedTicks = watch.ElapsedTicks;
 
                 txtIterativeB.Text = $"{elapsedTicks} Ticks";
 
-                //// Clear any previous selection
-                //lbSensorA.SelectedItems.Clear();
-
-                //if (result >= 0 && result < lbSensorA.Items.Count)
-                //{
-                //    // Highlight the range (5 elements) centered around the result
-                //    int start = Math.Max(0, result - 2); // Ensure start index is >= 0
-                //    int end = Math.Min(lbSensorA.Items.Count - 1, result + 2); // Ensure end index is within bounds
-
-                //    // Select the items in the specified range
-                //    for (int i = start; i <= end; i++)
-                //    {
-                //        lbSensorA.SelectedItems.Add(lbSensorA.Items[i]);
-                //    }
-                //}
+                HightlightListbox(found, lbSensorB);
             }
             else
             {
@@ -417,31 +374,17 @@ namespace SatelliteDataProcessing
             txtRecursiveB.Text = "";
             if (int.TryParse(txtSearchTargetB.Text, out int searchB))
             {
-                int min = 400; // not sure what is the minimum list size is????
+                int min = 0;
                 int max = NumberOfNodes(SensorBData);
 
                 var watch = System.Diagnostics.Stopwatch.StartNew();
-                int result = BinarySearchIterative(SensorBData, searchB, min, max);
+                int found = BinarySearchIterative(SensorBData, searchB, min, max);
                 watch.Stop();
                 var elapsedTicks = watch.ElapsedTicks;
 
                 txtRecursiveB.Text = $"{elapsedTicks} Ticks";
 
-                //// Clear any previous selection
-                //lbSensorA.SelectedItems.Clear();
-
-                //if (result >= 0 && result < lbSensorA.Items.Count)
-                //{
-                //    // Highlight the range (5 elements) centered around the result
-                //    int start = Math.Max(0, result - 2); // Ensure start index is >= 0
-                //    int end = Math.Min(lbSensorA.Items.Count - 1, result + 2); // Ensure end index is within bounds
-
-                //    // Select the items in the specified range
-                //    for (int i = start; i <= end; i++)
-                //    {
-                //        lbSensorA.SelectedItems.Add(lbSensorA.Items[i]);
-                //    }
-                //}
+                HightlightListbox(found, lbSensorB);
             }
             else
             {
@@ -473,6 +416,7 @@ namespace SatelliteDataProcessing
             DisplayListboxData(SensorAData, lbSensorA);
             btnIterativeA.IsEnabled = true;
             btnRecursiveA.IsEnabled = true;
+            btnInsertionA.IsEnabled = false;
         }
 
         // 2. Method for Sensor A and Insertion Sort
@@ -489,6 +433,7 @@ namespace SatelliteDataProcessing
             DisplayListboxData(SensorAData, lbSensorA);
             btnIterativeA.IsEnabled = true;
             btnRecursiveA.IsEnabled = true;
+            btnSelectionA.IsEnabled = false;
         }
 
         // 3. Method for Sensor B and Selection Sort 
@@ -505,6 +450,8 @@ namespace SatelliteDataProcessing
             DisplayListboxData(SensorBData, lbSensorB);
             btnIterativeB.IsEnabled = true;
             btnRecursiveB.IsEnabled = true;
+            btnInsertionB.IsEnabled = false;
+
         }
 
         // 4. Method for Sensor B and Insertion Sort
@@ -521,6 +468,7 @@ namespace SatelliteDataProcessing
             DisplayListboxData(SensorBData, lbSensorB);
             btnIterativeB.IsEnabled = true;
             btnRecursiveB.IsEnabled = true;
+            btnSelectionB.IsEnabled = false;
         }
 
         // 4.13 Add two numeric input controls for Sigma and Mu. The value for Sigma must be limited with a minimum of 10 and a maximum of 20.
@@ -546,8 +494,29 @@ namespace SatelliteDataProcessing
             }
         }
 
+        // Highlight the search target number and two values on each side. 
+        private void HightlightListbox(int newFound, ListBox newListBox)
+        {
+            // Set listbox.
+            newListBox.SelectionMode = SelectionMode.Multiple;
+            // Clear any previous selection
+            newListBox.SelectedItems.Clear();
+
+            if (newFound >= 0 && newFound < 400)
+            {
+                // Highlight the range (5 elements) centered around the result
+                int start = Math.Max(0, newFound - 2); // Ensure start index is >= 0
+                int end = Math.Min(399, newFound + 2); // Ensure end index is within bounds
+
+                // Select the items in the specified range
+                for (int i = start; i <= end; i++)
+                {
+                    newListBox.SelectedItems.Add(newListBox.Items[i]);
+                }
+            }
+        }
+
         // 4.15 All code is required to be adequately commented.
         #endregion
     }
-
 }

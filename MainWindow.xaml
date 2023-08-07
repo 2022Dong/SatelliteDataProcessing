@@ -64,19 +64,23 @@
         <!--Selection Sort-->
         <TextBlock Grid.Column="3" Grid.Row="3" Text="Selection Sort: " Margin="20,20,5,0"/>
         <TextBox Grid.Column="4" Grid.Row="3" x:Name="txtSelectionA" FontStyle="Italic" Margin="0,20,0,0"  IsEnabled="False"/>
-        <Button Grid.Column="3" Grid.Row="4" x:Name="btnSelectionA" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnSelectionA_Click"/>
+        <Button Grid.Column="3" Grid.Row="4" x:Name="btnSelectionA" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" 
+                Click="btnSelectionA_Click" IsEnabled="False"/>
         <!--Insertion Sort-->
         <TextBlock Grid.Column="3" Grid.Row="5" Text="Insertion Sort: " Margin="20,20,5,0"/>
         <TextBox Grid.Column="4" Grid.Row="5" x:Name="txtInsertionA" FontStyle="Italic" Margin="0,20,0,0"  IsEnabled="False"/>
-        <Button Grid.Column="3" Grid.Row="6" x:Name="btnInsertionA" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnInsertionA_Click"/>
+        <Button Grid.Column="3" Grid.Row="6" x:Name="btnInsertionA" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" 
+                Click="btnInsertionA_Click" IsEnabled="False"/>
         <!--Binary Search Iterative-->
         <TextBlock Grid.Column="3" Grid.Row="7" Text="Binary Search Iterative: " Margin="20,20,5,0"/>
         <TextBox Grid.Column="4" Grid.Row="7" x:Name="txtIterativeA" FontStyle="Italic" Margin="0,20,0,0"  IsEnabled="False"/>
-        <Button Grid.Column="3" Grid.Row="8" x:Name="btnIterativeA" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnIterativeA_Click"/>
+        <Button Grid.Column="3" Grid.Row="8" x:Name="btnIterativeA" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" 
+                Click="btnIterativeA_Click" IsEnabled="False"/>
         <!--Binary Search Recursive-->
         <TextBlock Grid.Column="3" Grid.Row="9" Text="Binary Search Recursive: " Margin="20,20,5,0" />
         <TextBox Grid.Column="4" Grid.Row="9" x:Name="txtRecursiveA" FontStyle="Italic" Margin="0,20,0,0" IsEnabled="False"/>
-        <Button Grid.Column="3" Grid.Row="10" x:Name="btnRecursiveA" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnRecursiveA_Click"/>
+        <Button Grid.Column="3" Grid.Row="10" x:Name="btnRecursiveA" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" 
+                Click="btnRecursiveA_Click" IsEnabled="False"/>
         <!--Sensor A Listbox-->
         <TextBlock Grid.Column="5" Grid.Row="2" Text="Sensor A" FontWeight="DemiBold" Margin="30,0,0,0"/>
         <ListBox Grid.Column="5" Grid.Row="3" x:Name="lbSensorA" Width="100" Grid.RowSpan="8" Margin="10,0,0,0"/>
@@ -87,19 +91,23 @@
         <!--Selection Sort-->
         <TextBlock Grid.Column="6" Grid.Row="3" Text="Selection Sort: " Margin="20,20,5,0"/>
         <TextBox Grid.Column="7" Grid.Row="3" x:Name="txtSelectionB" FontStyle="Italic" Margin="0,20,0,0"  IsEnabled="False"/>
-        <Button Grid.Column="6" Grid.Row="4" x:Name="btnSelectionB" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnSelectionB_Click"/>
+        <Button Grid.Column="6" Grid.Row="4" x:Name="btnSelectionB" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" 
+                Click="btnSelectionB_Click" IsEnabled="False"/>
         <!--Insertion Sort-->
         <TextBlock Grid.Column="6" Grid.Row="5" Text="Insertion Sort: " Margin="20,20,5,0"/>
         <TextBox Grid.Column="7" Grid.Row="5" x:Name="txtInsertionB" FontStyle="Italic" Margin="0,20,0,0"  IsEnabled="False"/>
-        <Button Grid.Column="6" Grid.Row="6" x:Name="btnInsertionB" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnInsertionB_Click"/>
+        <Button Grid.Column="6" Grid.Row="6" x:Name="btnInsertionB" Content="Click Sort" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" 
+                Click="btnInsertionB_Click" IsEnabled="False"/>
         <!--Binary Search Iterative-->
         <TextBlock Grid.Column="6" Grid.Row="7" Text="Binary Search Iterative: " Margin="20,20,5,0"/>
         <TextBox Grid.Column="7" Grid.Row="7" x:Name="txtIterativeB" FontStyle="Italic" Margin="0,20,0,0"  IsEnabled="False"/>
-        <Button Grid.Column="6" Grid.Row="8" x:Name="btnIterativeB" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnIterativeB_Click"/>
+        <Button Grid.Column="6" Grid.Row="8" x:Name="btnIterativeB" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" 
+                Click="btnIterativeB_Click" IsEnabled="False"/>
         <!--Binary Search Recursive-->
         <TextBlock Grid.Column="6" Grid.Row="9" Text="Binary Search Recursive: " Margin="20,20,5,0"/>
         <TextBox Grid.Column="7" Grid.Row="9" x:Name="txtRecursiveB" FontStyle="Italic" Margin="0,20,0,0"  IsEnabled="False"/>
-        <Button Grid.Column="6" Grid.Row="10" x:Name="btnRecursiveB" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" Click="btnRecursiveB_Click"/>
+        <Button Grid.Column="6" Grid.Row="10" x:Name="btnRecursiveB" Content="Click Search" Height="40" Grid.ColumnSpan="2" Margin="20,0,0,0" 
+                Click="btnRecursiveB_Click" IsEnabled="False"/>
         <!--Sensor A Listbox-->
         <TextBlock Grid.Column="8" Grid.Row="2" Text="Sensor B" FontWeight="DemiBold" Margin="30,0,0,0"/>
         <ListBox Grid.Column="8" Grid.Row="3" x:Name="lbSensorB" Width="100" Grid.RowSpan="8" Margin="10,0,0,0"/>
