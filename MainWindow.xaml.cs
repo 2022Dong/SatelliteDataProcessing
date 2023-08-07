@@ -157,6 +157,8 @@ namespace SatelliteDataProcessing
         // The method code must follow the pseudo code supplied below in the Appendix. The return type is Boolean. 
         private bool SelectionSort(LinkedList<double> list)
         {
+            LoadData();// need unsorted data each time
+            ShowAllSensorData();
             if (list == null || list.Count <= 1)
             {
                 // The list is already sorted if it contains 0 or 1 element.
@@ -194,6 +196,8 @@ namespace SatelliteDataProcessing
         // The method code must follow the pseudo code supplied below in the Appendix. The return type is Boolean. 
         private bool InsertionSort(LinkedList<double> list)
         {
+            LoadData();// need unsorted data each time
+            ShowAllSensorData();
             if (list == null || list.Count <= 1)
             {
                 // The list is already sorted if it contains 0 or 1 element.
