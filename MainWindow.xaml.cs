@@ -157,8 +157,8 @@ namespace SatelliteDataProcessing
         // The method code must follow the pseudo code supplied below in the Appendix. The return type is Boolean. 
         private bool SelectionSort(LinkedList<double> list)
         {
-            LoadData();// need unsorted data each time
-            ShowAllSensorData();
+            //LoadData();// need unsorted data each time - use disable btn instead
+            //ShowAllSensorData();
             if (list == null || list.Count <= 1)
             {
                 // The list is already sorted if it contains 0 or 1 element.
@@ -235,33 +235,37 @@ namespace SatelliteDataProcessing
         // The calling code argument is the linkedlist name, search value, minimum list size and the number of nodes in the list.
         // The method code must follow the pseudo code supplied below in the Appendix. 
         private int BinarySearchIterative(LinkedList<double> list, int searchValue, int min, int max)
-        {            
-            while (min <= max -1)
+        {
+            if (searchValue >= list.ElementAt(0) && searchValue <= list.ElementAt(399)) // search value within the range
             {
-                int middle = (min + max) / 2;
-                double middleValue = list.ElementAt(middle);
+                while (min <= max - 1)
+                {
+                    int middle = (min + max) / 2;
+                    double middleValue = list.ElementAt(middle);
 
-                if (searchValue == middleValue)
-                {
-                    // If the search value is found, return the index (position) of the element.
-                    return ++middle;
+                    if (searchValue == middleValue)
+                    {
+                        // If the search value is found, return the index (position) of the element.
+                        return ++middle;
+                    }
+                    else if (searchValue < middleValue)
+                    {
+                        // If the search value is less than the middle element,
+                        // update the maximum to search in the left half.
+                        max = middle - 1;
+                    }
+                    else
+                    {
+                        // If the search value is greater than the middle element,
+                        // update the minimum to search in the right half.
+                        min = middle + 1;
+                    }
                 }
-                else if (searchValue < middleValue)
-                {
-                    // If the search value is less than the middle element,
-                    // update the maximum to search in the left half.
-                    max = middle - 1;
-                }
-                else
-                {
-                    // If the search value is greater than the middle element,
-                    // update the minimum to search in the right half.
-                    min = middle + 1;
-                }
+
+                // If the search value is not found, return the position where it should be inserted (nearest neighbor).
+                return min;
             }
-
-            // If the search value is not found, return the position where it should be inserted (nearest neighbor).
-            return min;
+            else { return -1; }
         }
 
         // 4.10 Create a method called “BinarySearchRecursive” which has the following four parameters: LinkedList, SearchValue, Minimum and Maximum.
@@ -270,32 +274,36 @@ namespace SatelliteDataProcessing
         // The method code must follow the pseudo code supplied below in the Appendix. 
         private int BinarySearchRecursive(LinkedList<double> list, int searchValue, int min, int max)
         {
-            if (min <= max - 1)
+            if (searchValue >= list.ElementAt(0) && searchValue <= list.ElementAt(399))
             {
-                int middle = (min + max) / 2;
-                double middleValue = list.ElementAt(middle);
+                if (min <= max - 1)
+                {
+                    int middle = (min + max) / 2;
+                    double middleValue = list.ElementAt(middle);
 
-                if (searchValue == middleValue)
-                {
-                    // If the search value is found, return the index (position) of the element.
-                    return middle;
+                    if (searchValue == middleValue)
+                    {
+                        // If the search value is found, return the index (position) of the element.
+                        return middle;
+                    }
+                    else if (searchValue < middleValue)
+                    {
+                        // If the search value is less than the middle element,
+                        // recursively search in the left half.
+                        return BinarySearchRecursive(list, searchValue, min, middle - 1);
+                    }
+                    else
+                    {
+                        // If the search value is greater than the middle element,
+                        // recursively search in the right half.
+                        return BinarySearchRecursive(list, searchValue, middle + 1, max);
+                    }
                 }
-                else if (searchValue < middleValue)
-                {
-                    // If the search value is less than the middle element,
-                    // recursively search in the left half.
-                    return BinarySearchRecursive(list, searchValue, min, middle - 1);
-                }
-                else
-                {
-                    // If the search value is greater than the middle element,
-                    // recursively search in the right half.
-                    return BinarySearchRecursive(list, searchValue, middle + 1, max);
-                }
+
+                // If the search value is not found, return the position where it should be inserted (nearest neighbor).
+                return min;
             }
-
-            // If the search value is not found, return the position where it should be inserted (nearest neighbor).
-            return min;
+            else { return -1; }
         }
         #endregion
 
@@ -320,9 +328,12 @@ namespace SatelliteDataProcessing
                 watch.Stop();
                 var elapsedTicks = watch.ElapsedTicks;
 
-                txtIterativeA.Text = $"{elapsedTicks} Ticks";
-
-                HightlightListbox(found, lbSensorA);
+                if (found == -1) { txtIterativeA.Text = $"{elapsedTicks}Ticks, NotFound"; }
+                else
+                {
+                    txtIterativeA.Text = $"{elapsedTicks} Ticks";
+                    HightlightListbox(found, lbSensorA);
+                }
             }
             else
             {
@@ -344,9 +355,12 @@ namespace SatelliteDataProcessing
                 watch.Stop();
                 var elapsedTicks = watch.ElapsedTicks;
 
-                txtRecursiveA.Text = $"{elapsedTicks} Ticks";
-
-                HightlightListbox(found, lbSensorA);
+                if (found == -1) { txtRecursiveA.Text = $"{elapsedTicks}Ticks, NotFound"; }
+                else
+                {
+                    txtRecursiveA.Text = $"{elapsedTicks} Ticks";
+                    HightlightListbox(found, lbSensorA);
+                }
             }
             else
             {
@@ -369,10 +383,12 @@ namespace SatelliteDataProcessing
                 int found = BinarySearchIterative(SensorBData, searchB, min, max);
                 watch.Stop();
                 var elapsedTicks = watch.ElapsedTicks;
-
-                txtIterativeB.Text = $"{elapsedTicks} Ticks";
-
-                HightlightListbox(found, lbSensorB);
+                if (found == -1) { txtIterativeB.Text = $"{elapsedTicks}Ticks, NotFound"; }
+                else
+                {
+                    txtIterativeB.Text = $"{elapsedTicks} Ticks";
+                    HightlightListbox(found, lbSensorB);
+                }
             }
             else
             {
@@ -395,9 +411,12 @@ namespace SatelliteDataProcessing
                 watch.Stop();
                 var elapsedTicks = watch.ElapsedTicks;
 
-                txtRecursiveB.Text = $"{elapsedTicks} Ticks";
-
-                HightlightListbox(found, lbSensorB);
+                if (found == -1) { txtRecursiveB.Text = $"{elapsedTicks}Ticks, NotFound"; }
+                else
+                {
+                    txtRecursiveB.Text = $"{elapsedTicks} Ticks";
+                    HightlightListbox(found, lbSensorB);
+                }
             }
             else
             {
@@ -429,6 +448,7 @@ namespace SatelliteDataProcessing
             DisplayListboxData(SensorAData, lbSensorA);
             btnIterativeA.IsEnabled = true;
             btnRecursiveA.IsEnabled = true;
+            btnSelectionA.IsEnabled = false;
             btnInsertionA.IsEnabled = false;
         }
 
@@ -446,6 +466,7 @@ namespace SatelliteDataProcessing
             DisplayListboxData(SensorAData, lbSensorA);
             btnIterativeA.IsEnabled = true;
             btnRecursiveA.IsEnabled = true;
+            btnInsertionA.IsEnabled = false;
             btnSelectionA.IsEnabled = false;
         }
 
@@ -464,6 +485,7 @@ namespace SatelliteDataProcessing
             btnIterativeB.IsEnabled = true;
             btnRecursiveB.IsEnabled = true;
             btnInsertionB.IsEnabled = false;
+            btnSelectionB.IsEnabled = false;
 
         }
 
@@ -482,6 +504,7 @@ namespace SatelliteDataProcessing
             btnIterativeB.IsEnabled = true;
             btnRecursiveB.IsEnabled = true;
             btnSelectionB.IsEnabled = false;
+            btnInsertionB.IsEnabled = false;
         }
 
         // 4.13 Add two numeric input controls for Sigma and Mu. The value for Sigma must be limited with a minimum of 10 and a maximum of 20.
