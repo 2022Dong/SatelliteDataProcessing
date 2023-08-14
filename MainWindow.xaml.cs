@@ -77,32 +77,14 @@ namespace SatelliteDataProcessing
         public void ShowAllSensorData()
         {
             lvSensors.Items.Clear();
-            for (int x = 0; x < 400; x++)
+            for (int x = 0; x < NumberOfNodes(SensorAData); x++)
             {
                 lvSensors.Items.Add(new
                 {
                     SensorA = SensorAData.ElementAt(x).ToString(),
                     SensorB = SensorBData.ElementAt(x).ToString()
                 });
-            }
-
-            //var myObservableCollection = new ObservableCollection<object>();
-
-            //// Traverse both LinkedLists simultaneously and add items to the ListView
-            //var listAEnumerator = SensorAData.GetEnumerator();
-            //var listBEnumerator = SensorBData.GetEnumerator();
-
-            ////myObservableCollection.Add(new { colA = listAEnumerator.Current.ToString(), colB = listBEnumerator.Current.ToString()});
-            ////lvSensors.ItemsSource = myObservableCollection;
-
-            //while (listAEnumerator.MoveNext() && listBEnumerator.MoveNext())
-            //{
-            //    myObservableCollection.Add(new { SensorA = listAEnumerator.Current, SensorB = listBEnumerator.Current });
-            //}
-            //// Clear the existing items in the ListView
-            //lvSensors.ItemsSource = null;
-            //// Set the ObservableCollection as the ItemsSource for the ListView
-            //lvSensors.ItemsSource = myObservableCollection;            
+            }           
         }
 
         // 4.4 Create a button and associated click method that will call the LoadData and ShowAllSensorData methods.
@@ -125,6 +107,17 @@ namespace SatelliteDataProcessing
             btnRecursiveA.IsEnabled = false;
             btnIterativeB.IsEnabled = false;
             btnRecursiveB.IsEnabled = false;
+            // clear all textboxes
+            txtSearchTargetA.Text = "";
+            txtSearchTargetB.Text = "";
+            txtSelectionA.Text = "";
+            txtSelectionB.Text = "";
+            txtInsertionA.Text = "";
+            txtInsertionB.Text = "";
+            txtInsertionA.Text = "";
+            txtInsertionB.Text = "";
+            txtRecursiveA.Text = "";
+            txtRecursiveB.Text = "";
         }
         #endregion
 
